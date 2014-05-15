@@ -59,10 +59,11 @@ def caixaPesquisar(request):
 def caixaEditar(request, pk=0):
     try:
         conta = Conta.objects.get(pk=pk)
+        pessoa = Pessoa.objects.get(id=conta.pessoa_id)
     except:
         return HttpResponseRedirect('/caixas/')
 
-    return render(request, 'caixas/formCaixas.html', {'conta': conta})
+    return render(request, 'caixas/formCaixas.html', {'conta': conta, 'pessoa': pessoa})
 
 def caixaExcluir(request, pk=0):
     try:
@@ -72,11 +73,20 @@ def caixaExcluir(request, pk=0):
     except:
         return HttpResponseRedirect('/caixas/')
 
+def caixaFluxo(request):
+    if request.method == 'POST':
 
+        datainicial = datetime.strptime(request.POST.get('datainicial', ''), '%d/%m/%Y %H:%M:%S')
+        datafinal   = datetime.strptime(request.POST.get('datafinal',   ''), '%d/%m/%Y %H:%M:%S')
+        total = 0
 
+        try:
+            contas = Conta.objects.filter(data__range=(datainicial, datafinal))
+            for conta in contas:
+                total += conta.valor
+        except:
+            contas = []
 
-    
+        return render(request, 'fluxo/formFluxo.html', {'contas' : contas, 'total': total ,'datainicial': datainicial, 'datafinal': datafinal})
 
-
-
-
+    return render(request, 'fluxo/formFluxo.html', {'contas' : []})

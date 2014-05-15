@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Fluxo de Caixa{% endblock titulo %}
+
+{% block conteudo %}
+
+</script>
+<div class="container">
+<form class="form-horizontal" action="/caixas/fluxo/" method="POST" role="form">{% csrf_token %}
+
+            <div class="col-sm-3">
+                <label for="datetimepicker"><b>Data Inicial</b></label>
+                <p class="visible-print">{{ datainicial|date:"d/m/Y H:i:s" }}</p>
+                <div id="datetimepicker1" class="input-group date hidden-print">
+                    <input type="text" name="datainicial" value='{{ datainicial|date:"d/m/Y H:i:s" }}' class="form-contro2">
+                    <span class="input-group-addon add-on glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label for="datetimepicker" class=""><b>Data Final</b></label>
+                <p class="visible-print">{{ datafinal|date:"d/m/Y H:i:s" }}</p>
+                <div id="datetimepicker2" class="input-group date hidden-print">
+                    <input type="text" name="datafinal" value='{{ datafinal|date:"d/m/Y H:i:s" }}' class="form-contro1">
+                    <span class="input-group-addon add-on glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <br />
+                <button type="submit" class="btn btn-primary hidden-print"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+</form>
+</div>
+
+<hr>
+<div align="center"> 
+  <form role="form" method="POST" action="/caixas/pesquisar/">{% csrf_token %}
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="textoBusca" name="textoBusca" value="{{ textoBusca }}" placeholder="Digite um texto para a busca...">
+        </div>
+        <div class="col-md-2" align="center">
+          <button type="submit" class="btn btn-primary">Pesquisar <span class="glyphicon glyphicon-search"></span></button>
+        </div>
+      </div>
+    </div>  
+  </form>
+  
+
+</div>
+<div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Pessoa</th>
+            <th>R$</th>
+            <th>Descrição</th>
+            <th>Data</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for conta in contas %}
+          <tr>
+            <td><a href="/caixas/editar/{{ conta.pk }}">{{ conta.pessoa.nome }}</a></td>
+            <td>{{ conta.valor }}</td>
+            <td>{{ conta.descricao }}</td>
+            <td>{{ conta.data|date:"d/m/Y" }}</td>
+            <td>{{ conta.tipo }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        {% if total != NULL and contas|length > 0 %}
+        <tfoot>
+         <tr class="success">
+            <th>TOTAL:</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{ total }}</th>
+        </tr>
+        </tfoot>
+        {% endif %}
+      </table>
+</div>
+
+<!-- FIM TABELA -->
+{% if total != NULL and contas|length > 0 %}
+ <button type="submit" onClick="window.print()" class="btn btn-info col-md-offset-11 col-sm-1 hidden-print">Print</button>
+{% endif %}
+
+{% endblock conteudo %}
