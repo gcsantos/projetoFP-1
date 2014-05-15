@@ -34,14 +34,14 @@
 
 <hr>
 <div align="center"> 
-  <form role="form" method="POST" action="/caixas/pesquisar/">{% csrf_token %}
+  <form action="/caixas/fluxo/" method="POST" role="form">{% csrf_token %}
     <div class="form-group">
       <div class="row">
         <div class="col-md-10">
           <input type="text" class="form-control" id="textoBusca" name="textoBusca" value="{{ textoBusca }}" placeholder="Digite um texto para a busca...">
         </div>
-        <div class="col-md-2" align="center">
-          <button type="submit" class="btn btn-primary">Pesquisar <span class="glyphicon glyphicon-search"></span></button>
+        <div class="col-md-1" align="center">
+          <button type="submit" class="btn btn-primary hidden-print"><span class="glyphicon glyphicon-search"></span></button>
         </div>
       </div>
     </div>  
@@ -75,10 +75,10 @@
         <tfoot>
          <tr class="success">
             <th>TOTAL:</th>
-            <th></th>
-            <th></th>
-            <th></th>
             <th>{{ total }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </tfoot>
         {% endif %}
